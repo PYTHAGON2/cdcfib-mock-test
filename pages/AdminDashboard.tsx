@@ -8,10 +8,43 @@ interface AdminDashboardProps {
   onLogout: () => void;
 }
 
+const sampleQuizJSON = `[
+  {
+    "title": "Sample Quiz",
+    "description": "This is a sample quiz to show the format.",
+    "difficulty": "Easy",
+    "totalQuestions": 3,
+    "questionsToSelect": 2,
+    "timer": { "type": "total", "duration": 300 },
+    "questions": [
+      {
+        "id": "sq1",
+        "questionText": "What is 2 + 2?",
+        "type": "MCQ",
+        "options": ["3", "4", "5"],
+        "correctAnswer": "4"
+      },
+      {
+        "id": "sq2",
+        "questionText": "The sky is blue.",
+        "type": "TF",
+        "correctAnswer": "True"
+      },
+      {
+        "id": "sq3",
+        "questionText": "The capital of Japan is __.",
+        "type": "FIB",
+        "correctAnswer": "Tokyo"
+      }
+    ]
+  }
+]`;
+
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [quizzes, setQuizzes] = useLocalStorage<Quiz[]>('quizzes', []);
   const [attempts, setAttempts] = useLocalStorage<QuizAttempt[]>('quiz-attempts', []);
   const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
+  const [jsonInput, setJsonInput] = useState('');
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -33,6 +66,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         }
       };
       reader.readAsText(file);
+    }
+  };
+  
+  const handleJsonPaste = () => {
+    if (!jsonInput.trim()) {
+        alert('Please paste JSON content first.');
+        return;
+    }
+    try {
+      const newQuizzes = JSON.parse(jsonInput) as Quiz[];
+      if (Array.isArray(newQuizzes) && newQuizzes.every(q => q.title && q.questions)) {
+          setQuizzes(prev => [...prev, ...newQuizzes.map(q => ({...q, id: q.id || `${q.title.replace(/\s+/g, '-')}-${Date.now()}`}))]);
+          alert(`${newQuizzes.length} quiz(zes) added successfully!`);
+          setJsonInput('');
+      } else {
+          alert('Invalid JSON format. Expected an array of quizzes.');
+      }
+    } catch (error) {
+        alert('Failed to parse JSON.');
+        console.error(error);
     }
   };
 
@@ -80,11 +133,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             <span>Upload Quizzes (JSON)</span>
             <input type="file" className="hidden" accept=".json" onChange={handleFileUpload} />
           </label>
-          <div className="mt-6 space-y-2 max-h-96 overflow-y-auto">
+           <div className="mt-4">
+            <textarea
+              className="w-full h-32 p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              placeholder="Or paste quiz JSON here..."
+              value={jsonInput}
+              onChange={(e) => setJsonInput(e.target.value)}
+              aria-label="Paste quiz JSON"
+            ></textarea>
+            <button
+              onClick={handleJsonPaste}
+              className="mt-2 w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors"
+            >
+              Add Quiz from Pasted JSON
+            </button>
+          </div>
+          <details className="mt-4 text-sm">
+            <summary className="cursor-pointer text-primary-600 dark:text-primary-400 hover:underline">
+              View Sample Quiz JSON Format
+            </summary>
+            <pre className="mt-2 p-4 bg-gray-100 dark:bg-gray-900 rounded-md text-xs overflow-x-auto">
+                <code>{sampleQuizJSON}</code>
+            </pre>
+          </details>
+
+          <div className="mt-6 space-y-2 max-h-72 overflow-y-auto">
             {quizzes.map(quiz => (
               <div key={quiz.id} className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700 rounded-md">
                 <span>{quiz.title}</span>
-                <button onClick={() => deleteQuiz(quiz.id)} className="text-red-500 hover:text-red-700">
+                <button onClick={() => deleteQuiz(quiz.id)} className="text-red-500 hover:text-red-700" aria-label={`Delete ${quiz.title}`}>
                   <TrashIcon />
                 </button>
               </div>
@@ -110,6 +187,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   <tr className="border-b dark:border-gray-600">
                     <th className="p-2">User</th>
                     <th className="p-2">IP</th>
+                    <th className="p-2">Device</th>
                     <th className="p-2">Score</th>
                     <th className="p-2">Date</th>
                   </tr>
@@ -119,6 +197,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     <tr key={attempt.id} className="border-b dark:border-gray-700">
                       <td className="p-2">{attempt.userName}</td>
                       <td className="p-2">{attempt.ipAddress}</td>
+                      <td className="p-2">{attempt.device}</td>
                       <td className="p-2">{attempt.score}%</td>
                       <td className="p-2 text-sm">{new Date(attempt.timestamp).toLocaleString()}</td>
                     </tr>

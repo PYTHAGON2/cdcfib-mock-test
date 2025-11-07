@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Quiz, User } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { getDeviceType } from '../utils/helpers';
 
 interface HomePageProps {
   user: User | null;
@@ -70,7 +71,8 @@ export const HomePage: React.FC<HomePageProps> = ({ user, onLogin, onAdminLogin,
       if (!isIpIdentified) {
         setIpUserMap(prev => ({ ...prev, [ip]: name.trim() }));
       }
-      onLogin({ name: name.trim(), ip });
+      const device = getDeviceType();
+      onLogin({ name: name.trim(), ip, device });
     }
   };
 

@@ -41,6 +41,7 @@ export interface QuizAttempt {
   quizTitle: string;
   userName: string;
   ipAddress: string;
+  device: string;
   score: number;
   totalCorrect: number;
   totalWrong: number;
@@ -53,4 +54,5 @@ export interface QuizAttempt {
 export interface User {
   name: string;
   ip: string;
+  device: string;
 }

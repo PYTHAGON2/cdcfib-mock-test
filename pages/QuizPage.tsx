@@ -107,6 +107,7 @@ export const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onFinish, onBack
       quizTitle: quiz.title,
       userName: user.name,
       ipAddress: user.ip,
+      device: user.device,
       score: Math.round((correctCount / questions.length) * 100),
       totalCorrect: correctCount,
       totalWrong: wrongCount + (unansweredCount),
@@ -121,7 +122,7 @@ export const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onFinish, onBack
     localStorage.removeItem(`quiz-state-${user.name}-${quiz.id}`);
 
     onFinish(attempt);
-  }, [questions, answers, quiz.id, quiz.title, user.name, user.ip, onFinish]);
+  }, [questions, answers, quiz.id, quiz.title, user, onFinish]);
   
   useEffect(() => {
     if (timeLeft <= 0) {
