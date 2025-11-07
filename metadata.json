@@ -1,0 +1,5 @@
+{
+  "name": "CDCFIB MOCK ONLINE TEST",
+  "description": "A modern, responsive quiz platform with both admin and user modes. Users can take quizzes, view results, and admins can manage quizzes and user attempts.",
+  "requestFramePermissions": []
+}
