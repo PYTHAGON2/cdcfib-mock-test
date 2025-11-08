@@ -8,7 +8,6 @@ interface QuizPageProps {
   quiz: Quiz;
   user: User;
   onFinish: (attempt: any) => void;
-  onBackToHome: () => void;
 }
 
 const QuestionDisplay: React.FC<{ 
@@ -98,7 +97,7 @@ const QuestionDisplay: React.FC<{
     }
 };
 
-export const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onFinish, onBackToHome }) => {
+export const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onFinish }) => {
   const [questions] = useState(() => shuffleArray(quiz.questions).slice(0, quiz.questionsToSelect));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   
@@ -176,6 +175,12 @@ export const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onFinish, onBack
 
     onFinish(attempt);
   }, [questions, answers, quiz.id, quiz.title, user, onFinish]);
+
+  const handleExitQuiz = () => {
+    if (window.confirm('Are you sure you want to end the quiz? Your current progress will be submitted and you will be taken to the results page.')) {
+      submitQuiz();
+    }
+  };
   
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -253,7 +258,7 @@ export const QuizPage: React.FC<QuizPageProps> = ({ quiz, user, onFinish, onBack
       </div>
 
       <div className="mt-8 text-center">
-          <button onClick={onBackToHome} className="text-sm text-gray-500 hover:underline">Exit Quiz</button>
+          <button onClick={handleExitQuiz} className="text-sm text-gray-500 hover:underline">Exit Quiz & See Results</button>
       </div>
     </div>
   );

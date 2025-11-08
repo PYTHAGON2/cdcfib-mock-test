@@ -117,7 +117,7 @@ const App: React.FC = () => {
     switch (view) {
       case 'quiz':
         return activeQuiz && user ? (
-          <QuizPage quiz={activeQuiz} user={user} onFinish={finishQuiz} onBackToHome={backToHome} />
+          <QuizPage quiz={activeQuiz} user={user} onFinish={finishQuiz} />
         ) : null;
       case 'result':
         return lastAttempt && user ? (
