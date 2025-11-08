@@ -7,7 +7,6 @@ import { getDeviceType } from '../utils/helpers';
 interface HomePageProps {
   user: User | null;
   onLogin: (user: User) => void;
-  onAdminLogin: (password: string) => void;
   onStartQuiz: (quiz: Quiz) => void;
   onLogout: () => void;
 }
@@ -26,7 +25,7 @@ const DifficultyBadge: React.FC<{ difficulty: string }> = ({ difficulty }) => {
 };
 
 
-export const HomePage: React.FC<HomePageProps> = ({ user, onLogin, onAdminLogin, onStartQuiz, onLogout }) => {
+export const HomePage: React.FC<HomePageProps> = ({ user, onLogin, onStartQuiz, onLogout }) => {
   const [name, setName] = useState('');
   const [ip, setIp] = useState<string | null>(null);
   const [isIpIdentified, setIsIpIdentified] = useState(false);
@@ -59,14 +58,6 @@ export const HomePage: React.FC<HomePageProps> = ({ user, onLogin, onAdminLogin,
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim().toLowerCase() === 'admin') {
-      const password = prompt('Enter admin password:');
-      if (password) {
-        onAdminLogin(password);
-      }
-      return;
-    }
-
     if (name.trim() && ip) {
       if (!isIpIdentified) {
         setIpUserMap(prev => ({ ...prev, [ip]: name.trim() }));

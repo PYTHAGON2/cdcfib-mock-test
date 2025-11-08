@@ -97,7 +97,7 @@ Correct Answer: ${Array.isArray(q.correctAnswer) ? q.correctAnswer.join(', ') : 
                 {status !== 'correct' && (
                   <p className="mt-1 text-sm text-green-700 dark:text-green-400">Correct answer: <span className="font-medium">{Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer}</span></p>
                 )}
-                {question.explanation && <p className="mt-2 text-xs italic text-gray-600 dark:text-gray-400">Explanation: {question.explanation}</p>}
+                {(question.note || question.explanation) && <p className="mt-2 text-xs italic text-gray-600 dark:text-gray-400">Note: {question.note || question.explanation}</p>}
               </div>
             );
           })}

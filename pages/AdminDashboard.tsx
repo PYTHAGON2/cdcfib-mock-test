@@ -16,25 +16,29 @@ const sampleQuizJSON = `[
     "totalQuestions": 3,
     "questionsToSelect": 2,
     "timer": { "type": "total", "duration": 300 },
+    "showNotesAfterQuestion": true,
     "questions": [
       {
         "id": "sq1",
         "questionText": "What is 2 + 2?",
         "type": "MCQ",
         "options": ["3", "4", "5"],
-        "correctAnswer": "4"
+        "correctAnswer": "4",
+        "note": "This is a basic arithmetic operation. The sum of 2 and 2 is 4."
       },
       {
         "id": "sq2",
         "questionText": "The sky is blue.",
         "type": "TF",
-        "correctAnswer": "True"
+        "correctAnswer": "True",
+        "note": "The sky appears blue to the human eye primarily due to Rayleigh scattering of sunlight by the Earth's atmosphere."
       },
       {
         "id": "sq3",
         "questionText": "The capital of Japan is __.",
         "type": "FIB",
-        "correctAnswer": "Tokyo"
+        "correctAnswer": "Tokyo",
+        "note": "Tokyo has been the de facto capital of Japan since 1868 when the Emperor moved the Imperial Court there."
       }
     ]
   }

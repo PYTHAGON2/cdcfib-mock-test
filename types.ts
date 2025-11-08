@@ -12,6 +12,7 @@ export interface Question {
   options?: string[];
   correctAnswer: string | string[];
   explanation?: string;
+  note?: string;
 }
 
 export interface TimerConfig {
@@ -28,6 +29,7 @@ export interface Quiz {
   questionsToSelect: number;
   timer: TimerConfig;
   questions: Question[];
+  showNotesAfterQuestion?: boolean;
 }
 
 export interface UserAnswer {
